@@ -1,7 +1,7 @@
 import os
 import glob
 import math
-from PIL import Image
+from PIL import Image, ImageOps
 from sklearn.cluster import KMeans
 
 import numpy as np
@@ -119,6 +119,7 @@ def run_pca(input_files, show_name):
     # load images into matrix
     #lwf_immatrix = np.array([np.array(Image.open(im)).flatten()
     #                         for im in input_files])
+    #red, green, blue = img.split()
     lwf_immatrix_r = np.array([np.array(Image.open(im))[:, :, 0].flatten() for im in input_files])
     lwf_immatrix_g = np.array([np.array(Image.open(im))[:, :, 1].flatten() for im in input_files])
     lwf_immatrix_b = np.array([np.array(Image.open(im))[:, :, 2].flatten() for im in input_files])
@@ -144,13 +145,13 @@ def run_pca(input_files, show_name):
 
         plt.subplot(3, 4, 1)
         plt.imshow(bimmean.reshape(m, n))
-        #scipy.misc.imsave("results/%s_pca_mean_%s_%d.jpg" % (show_name, rgb_type, i), bimmean.reshape(m, n))
+        #scipy.misc.imsave("../results/%s_pca_mean_%s_%d.jpg" % (show_name, rgb_type, i), bimmean.reshape(m, n))
         plt.axis('off')
 
         for i in range(8):
             plt.subplot(3, 3, i+2)
             plt.imshow(bV[i].reshape(m, n))
-            #scipy.misc.imsave("results/%s_pca_%s_%d.jpg" % (show_name, rgb_type, i), bV[i].reshape(m, n))
+            #scipy.misc.imsave("../results/%s_pca_%s_%d.jpg" % (show_name, rgb_type, i), bV[i].reshape(m, n))
             plt.axis('off')
 
         plt.show()
@@ -160,10 +161,10 @@ def run_pca(input_files, show_name):
         bV_r = results['r'][1][i].reshape(m, n)
         bV_g = results['g'][1][i].reshape(m, n)
         bV_b = results['b'][1][i].reshape(m, n)
-        merged = np.dstack((bV_r, bV_g, bV_b))
+        merged = np.dstack((bV_b, bV_g, bV_r))
         plt.subplot(3, 3, i + 2)
         plt.imshow(merged)
-        scipy.misc.imsave("results/%s_pca_merge_%d.jpg" % (show_name, i), merged)
+        scipy.misc.imsave("../results/%s_pca_merge_%d.jpg" % (show_name, i), merged)
         plt.axis('off')
 
     plt.show()
